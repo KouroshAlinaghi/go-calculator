@@ -10,21 +10,24 @@ func Parse(input string) []string {
     input = strings.ReplaceAll(input, " ", "")
     var curToken string
     for i, char := range input {
-        if char == ' ' {
-            continue
-        }
-        if (i != 0) && char == '(' {
-            lastChar := input[i-1]
-            if lastChar == ')' || (!isOperator(string(lastChar)) && lastChar != '(') {
-                res = append(res, "*")
-            }
-        }
         if isOperator(string(char)) || isParenthesis(string(char)) {
+            if char == '-' && (i == 0 || !isDigit(string(input[i-1]))) {
+                curToken = "-"
+                continue
+            }
             if curToken != "" {
                 res = append(res, curToken)
             }
             res = append(res, string(char))
             curToken = ""
+
+            if i != 0 && char == '(' {
+                lastChar := input[i-1]
+                if lastChar == ')' || isDigit(string(lastChar)) {
+                    res = append(res, "*")
+                }
+            }
+
         } else if i == len(input) - 1 {
             curToken += string(char)
             res = append(res, curToken)
@@ -82,4 +85,17 @@ func isOperator(c string) bool {
 
 func isParenthesis(c string) bool {
     return c == "(" || c == ")"
+}
+
+func isDigit(c string) bool {
+    return c == "0" ||
+           c == "1" ||
+           c == "2" ||
+           c == "3" ||
+           c == "4" ||
+           c == "5" ||
+           c == "6" ||
+           c == "7" ||
+           c == "8" ||
+           c == "9"
 }
