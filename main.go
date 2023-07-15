@@ -4,6 +4,9 @@ import (
     "fmt"
     "os"
     "bufio"
+
+    "calculator/parser"
+    "calculator/eval"
 )
 
 func main() {
@@ -19,9 +22,9 @@ func main() {
             continue
         }
         input = scanner.Text()
-        infix = Parse(input)
-        postfix = InfixToPostfix(infix)
-        res = CalculatePosfix(postfix)
+        infix = parser.Parse(input)
+        postfix = parser.InfixToPostfix(infix)
+        res = eval.EvaluatePosfix(postfix)
         fmt.Println(res)
     }
 }

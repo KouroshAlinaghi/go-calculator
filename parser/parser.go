@@ -1,8 +1,10 @@
-package main
+package parser
 
 import (
 	"fmt"
 	"strings"
+
+	"calculator/stack"
 )
 
 func Parse(input string) []string {
@@ -10,7 +12,7 @@ func Parse(input string) []string {
     input = strings.ReplaceAll(input, " ", "")
     var curToken string
     for i, char := range input {
-        if isOperator(string(char)) || isParenthesis(string(char)) {
+        if IsOperator(string(char)) || isParenthesis(string(char)) {
             if char == '-' && (i == 0 || !isDigit(string(input[i-1]))) {
                 curToken = "-"
                 continue
@@ -53,7 +55,7 @@ func InfixToPostfix(infix []string) []string {
 
     infix = append(infix, ")")
 
-    stack := Stack[string]()
+    stack := stack.Stack[string]()
     stack.Push("(")
 
     for _, token := range infix {
@@ -64,12 +66,12 @@ func InfixToPostfix(infix []string) []string {
                 res = append(res, stack.Pop())
             }
             stack.Pop()
-        } else if isOperator(token) {
+        } else if IsOperator(token) {
             for precedence[stack.Top()] > precedence[token] {
                 res = append(res, stack.Pop())
             }
             stack.Push(token)
-        } else if !isOperator(token) && !isParenthesis(token) {
+        } else if !IsOperator(token) && !isParenthesis(token) {
             res = append(res, token)
         } else {
             fmt.Printf("INVALID TOKEN %v\n", token)
@@ -79,7 +81,7 @@ func InfixToPostfix(infix []string) []string {
     return res
 }
 
-func isOperator(c string) bool {
+func IsOperator(c string) bool {
     return c == "*" || c == "+" || c == "-" || c == "/" || c == "^"
 }
 

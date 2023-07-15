@@ -1,15 +1,18 @@
-package main
+package eval
 
 import (
 	"math"
 	"strconv"
 	"fmt"
+
+	"calculator/stack"
+	"calculator/parser"
 )
 
-func CalculatePosfix(postfix []string) string {
-    stack := Stack[string]()
+func EvaluatePosfix(postfix []string) string {
+    stack := stack.Stack[string]()
     for _, token := range postfix {
-        if !isOperator(token) {
+        if !parser.IsOperator(token) {
             stack.Push(token)
         } else {
             right := stack.Pop()

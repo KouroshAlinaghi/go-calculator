@@ -1,4 +1,4 @@
-package main
+package stack
 
 type stack[T any] struct {
     Push func(T)
